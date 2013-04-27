@@ -66,8 +66,6 @@ def output(partId, auxstring):
 
 
 # ====================== SERVER CONFIGURATION ===========================
-
-# ***************** REMOVE -staging WHEN YOU DEPLOY *********************
 def site_url():
     return 'https://class.coursera.org/ml-003'
 
@@ -86,12 +84,13 @@ def source(partId):
     src_files = sources()
     assert partId <= len(src_files)
     src = ''
-    for f_name in src_files[partId]:
+    for f_name in src_files.values()[partId]:
         try:
             with open(f_name) as f:
                 src += f.read()
         except IOError:
             print 'Error opening %s (is it missing?)' % f_name
+            return None
         src += '||||||||'
     return src
 
@@ -109,10 +108,10 @@ def promptPart():
         print '==   %s) %s [' % (i+1, part),
         print ' %s ', ' '.join(srcFiles[part]),
         print ']'
-    print '==   %s) All of the above \n==\nEnter your choice [1-%s]: ' % (len(partNames) + 1, len(partNames) + 1)
+    print '==   %s) All of the above \n==\nEnter your choice [1-%s]: ' % (len(partNames) + 1, len(partNames) + 1),
     while True:
         try:
-            partId = int(raw_input('Enter the number > ') or -1)
+            partId = int(raw_input() or -1)
             break
         except ValueError:
             print 'Invalid number; please try again'
@@ -122,7 +121,17 @@ def promptPart():
 
 
 def getChallenge(email, part):
-    raise NotImplementedError
+    'Returns the tuple "email, ch, signature, auxstring"'
+    import urllib
+    import urllib2
+    params = {'assignment_part_sid': '-'.join([homework_id(), str(part)]),
+              'email_address': email,
+              'response_encoding': 'delim'}
+    encoded_params = urllib.urlencode(params)
+    request = urllib2.Request(challenge_url(), data=encoded_params)
+    fields = urllib2.urlopen(request).read().split('|')
+    return fields[2::2]
+
 
 
 def submitSolutionWeb(email, part, output, source):
@@ -154,7 +163,7 @@ def submitSolution(email, ch_resp, part, output, source, signature):
 # =========================== LOGIN HELPERS ===========================
 def loginPrompt():
   # Prompt for password
-  # @Yaser seems redundant
+  # @Yaser: seems redundant
     login, password = basicPrompt()
     return login, password
 
