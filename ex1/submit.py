@@ -46,18 +46,19 @@ def homework_id():
 
 
 def validParts():
-    return sources.keys()
+    return sources().keys()
 
 
 def sources():
-  # Returns the source files corresponding to each task
-    return {'Warm up exercise ': ['warmUpExercise.m'],
-            'Computing Cost (for one variable)': ['computeCost.m'],
-            'Gradient Descent (for one variable)': ['gradientDescent.m'],
-            'Feature Normalization': ['featureNormalize.m'],
-            'Computing Cost (for multiple variables)': ['computeCostMulti.m'],
-            'Gradient Descent (for multiple variables)': ['gradientDescentMulti.m'],
-            'Normal Equations': ['normalEqn.m']}
+    from collections import OrderedDict
+    # Returns the source files corresponding to each task
+    return OrderedDict([('Warm up exercise ', ['warmUpExercise.py']),
+                        ('Computing Cost (for one variable)', ['computeCost.m']),
+                        ('Gradient Descent (for one variable)', ['gradientDescent.m']),
+                        ('Feature Normalization', ['featureNormalize.m']),
+                        ('Computing Cost (for multiple variables)', ['computeCostMulti.m']),
+                        ('Gradient Descent (for multiple variables)', ['gradientDescentMulti.m']),
+                        ('Normal Equations', ['normalEqn.m'])])
 
 
 def output(partId, auxstring):
