@@ -42,24 +42,22 @@ def submit(partId=None, webSubmit=False):
 
 # ================== CONFIGURABLES FOR EACH HOMEWORK ==================
 def homework_id():
-    return '4'
+    return '1'
 
 
 def validParts():
-    return ['Feedforward and Cost Function',
-            'Regularized Cost Function',
-            'Sigmoid Gradient',
-            'Neural Network Gradient (Backpropagation)',
-            'Regularized Gradient']
+    return sources.keys()
 
 
 def sources():
   # Returns the source files corresponding to each task
-    return {'Feedforward and Cost Function': ['nnCostFunction.m'],
-            'Regularized Cost Function': ['nnCostFunction.m'],
-            'Sigmoid Gradient': ['sigmoidGradient.m'],
-            'Neural Network Gradient (Backpropagation)': ['nnCostFunction.m'],
-            'Regularized Gradient': ['nnCostFunction.m']}
+    return {'Warm up exercise ': ['warmUpExercise.m'],
+            'Computing Cost (for one variable)': ['computeCost.m'],
+            'Gradient Descent (for one variable)': ['gradientDescent.m'],
+            'Feature Normalization': ['featureNormalize.m'],
+            'Computing Cost (for multiple variables)': ['computeCostMulti.m'],
+            'Gradient Descent (for multiple variables)': ['gradientDescentMulti.m'],
+            'Normal Equations': ['normalEqn.m']}
 
 
 def output(partId, auxstring):
@@ -70,7 +68,7 @@ def output(partId, auxstring):
 
 # ***************** REMOVE -staging WHEN YOU DEPLOY *********************
 def site_url():
-    return 'http://www.coursera.org/ml'
+    return 'https://class.coursera.org/ml-003'
 
 
 def challenge_url():
@@ -80,9 +78,8 @@ def challenge_url():
 def submit_url():
     return site_url() + '/assignment/submit'
 
+
 # ========================= CHALLENGE HELPERS =========================
-
-
 def source(partId):
     # Concatenates source files for a given assignment
     src_files = sources()
@@ -137,7 +134,20 @@ def submitSolutionWeb(email, part, output, source):
 
 
 def submitSolution(email, ch_resp, part, output, source, signature):
-    raise NotImplementedError
+    import urllib
+    import urllib2
+    params = {'assignment_part_sid': '-'.join([homework_id(), str(part)]),
+              'email_address': email,
+              'submission': base64encode(output, ''),
+              'submission_aux': base64encode(source, ''),
+              'challenge_response': ch_resp,
+              'state': signature}
+    encoded_params = urllib.urlencode(params)
+    request = urllib2.Request(submit_url(), encoded_params)
+    string = request.urlopen().read()
+    # Parse str to read for success / failure
+    result = 0
+    return result, string
 
 
 # =========================== LOGIN HELPERS ===========================
@@ -166,21 +176,69 @@ def challengeResponse(email, passwd, challenge):
 
 
 # =============================== SHA-1 ================================
+from struct import pack, unpack
+
+
 def sha1(string):
-    raise NotImplementedError
-
-
-def bitadd(iA, iB):
-    raise NotImplementedError
+    from numpy import uint32
+    # Initialize variables:
+    h0 = 1732584193
+    h1 = 4023233417
+    h2 = 2562383102
+    h3 = 271733878
+    h4 = 3285377520
+    # Convert to word array
+    strlen = len(string)
+    numB = strlen * 8
+    # Break string into chars and append the bit '1' to the message
+    string += '\x80'
+    string += '\x00' * ((56 - (strlen + 1) % 64) % 64)
+    # append length of message
+    string += pack('>Q', numB)
+    # Process the message in successive 512-bit chunks:
+    for i in xrange(0, len(string), 64):
+        mW = [0] * 80
+        for j in xrange(16):
+            mW[j] = unpack('>I', string[i + j*4:i + j*4 + 4])[0]
+        # Extend the sixteen 32-bit words into eighty 32-bit words:
+        for j in xrange(16, 80):
+            mW[j] = bitrotate(mW[j-3] ^ mW[j-8] ^ mW[j-14] ^ mW[j-16], 1)
+        # Initialize hash value for this ch
+        a = h0
+        b = h1
+        c = h2
+        d = h3
+        e = h4
+        # Main loop
+        for i in xrange(80):
+            if 0 <= i <= 19:
+                f = d ^ (b & (c ^ d))
+                k = uint32(1518500249)
+            elif 20 <= i <= 39:
+                f = b ^ c ^ d
+                k = uint32(1859775393)
+            elif 40 <= i <= 59:
+                f = (b & c) | (b & d) | (c & d)
+                k = uint32(2400959708)
+            elif 60 <= i <= 79:
+                f = b ^ c ^ d
+                k = uint32(3395469782)
+            a, b, c, d, e = ((bitrotate(a, 5) + f + e + k + mW[i]) & 0xffffffff, a, bitrotate(b, 30), c, d)
+        h0 = (h0 + a) & 0xffffffff
+        h1 = (h1 + b) & 0xffffffff
+        h2 = (h2 + c) & 0xffffffff
+        h3 = (h3 + d) & 0xffffffff
+        h4 = (h4 + e) & 0xffffffff
+    return '%08x%08x%08x%08x%08x' % (h0, h1, h2, h3, h4)
 
 
 def bitrotate(iA, places):
-    raise NotImplementedError
+    return ((iA << places) | (iA >> (32 - places))) & 0xffffffff
 
 
 def base64encode(x, eol='\n'):
-  #BASE64ENCODE Perform base64 encoding on a string.
-    raise NotImplementedError
+    from base64 import b64encode
+    return b64encode(x)
 
 
 if __name__ == "__main__":
