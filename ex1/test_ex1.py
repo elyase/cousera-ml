@@ -13,3 +13,9 @@ def test_base64encode():
     warm_up_result = """1.00000 0.00000 0.00000 0.00000 0.00000 0.00000 1.00000 0.00000 0.00000 0.00000 0.00000 0.00000 1.00000 0.00000 0.00000 0.00000 0.00000 0.00000 1.00000 0.00000 0.00000 0.00000 0.00000 0.00000 1.00000 """
     warm_up_matlab_encoded = """MS4wMDAwMCAwLjAwMDAwIDAuMDAwMDAgMC4wMDAwMCAwLjAwMDAwIDAuMDAwMDAgMS4wMDAwMCAwLjAwMDAwIDAuMDAwMDAgMC4wMDAwMCAwLjAwMDAwIDAuMDAwMDAgMS4wMDAwMCAwLjAwMDAwIDAuMDAwMDAgMC4wMDAwMCAwLjAwMDAwIDAuMDAwMDAgMS4wMDAwMCAwLjAwMDAwIDAuMDAwMDAgMC4wMDAwMCAwLjAwMDAwIDAuMDAwMDAgMS4wMDAwMCA="""
     assert submit.base64encode(warm_up_result) == warm_up_matlab_encoded
+
+
+def test_isValidPartId():
+    assert submit.isValidPartId(1)
+    assert not submit.isValidPartId(0)
+    assert not submit.isValidPartId(9)
