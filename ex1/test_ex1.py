@@ -19,3 +19,8 @@ def test_isValidPartId():
     assert submit.isValidPartId(1)
     assert not submit.isValidPartId(0)
     assert not submit.isValidPartId(9)
+
+
+def test_getChallenge():
+    email = 'yaser.martinez@gmail.com'
+    assert submit.getChallenge(email, 1)[0] == email
