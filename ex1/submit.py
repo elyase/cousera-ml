@@ -53,7 +53,7 @@ def sources():
     from collections import OrderedDict
     # Returns the source files corresponding to each task
     return OrderedDict([('Warm up exercise ', ['warmUpExercise.py']),
-                        ('Computing Cost (for one variable)', ['computeCost.m']),
+                        ('Computing Cost (for one variable)', ['computeCost.py']),
                         ('Gradient Descent (for one variable)', ['gradientDescent.m']),
                         ('Feature Normalization', ['featureNormalize.m']),
                         ('Computing Cost (for multiple variables)', ['computeCostMulti.m']),
@@ -63,7 +63,7 @@ def sources():
 
 def output(partId, auxstring=''):
     # Random Test Cases
-    from numpy import ones, arange, column_stack, sin, exp, cos
+    from numpy import ones, arange, column_stack, sin, exp, cos, array, asarray
 
     X1 = column_stack((ones((20,)), (exp(1)+exp(2)*arange(0.1, 2.1, 0.1))))
     Y1 = X1[:, 1] + sin(X1[:,0]) + cos(X1[:,1])
@@ -71,7 +71,7 @@ def output(partId, auxstring=''):
     Y2 = Y1**0.5 + Y1
     cmd = {
         1: 'warmUpExercise()',
-        2: 'computeCost(X1, Y1, [0.5, -0.5])',
+        2: 'computeCost(X1, Y1, array([0.5, -0.5]))',
         3: 'gradientDescent(X1, Y1, [0.5, -0.5], 0.01, 10)',
         4: 'featureNormalize(X2[:,1:3])',
         5: 'computeCostMulti(X2, Y2, [0.1, 0.2, 0.3, 0.4])',
@@ -81,7 +81,7 @@ def output(partId, auxstring=''):
     module_name = cmd.split('(')[0]
     m = __import__(module_name)
     result = eval('m' + '.' + cmd, globals(), locals())   # improve this
-    return ' '.join("{0:0.5f}".format(e) for e in result.ravel(order='F')) + ' '
+    return ' '.join("{0:0.5f}".format(e) for e in asarray(result, order='F').ravel()) + ' '
 
 
 # ====================== SERVER CONFIGURATION ===========================
@@ -103,7 +103,7 @@ def source(partId):
     src_files = sources()
     assert partId <= len(src_files)
     src = ''
-    for f_name in src_files.values()[partId]:
+    for f_name in src_files.values()[partId-1]:
         try:
             with open(f_name) as f:
                 src += f.read()
@@ -125,7 +125,7 @@ def promptPart():
     srcFiles = sources()
     for i, part in enumerate(partNames):
         print '==   %s) %s [' % (i+1, part),
-        print ' %s ', ' '.join(srcFiles[part]),
+        print ' '.join(srcFiles[part]),
         print ']'
     print '==   %s) All of the above \n==\nEnter your choice [1-%s]: ' % (len(partNames) + 1, len(partNames) + 1),
     while True:
@@ -173,7 +173,7 @@ def submitSolution(email, ch_resp, part, output, source, signature):
               'state': signature}
     encoded_params = urllib.urlencode(params)
     request = urllib2.Request(submit_url(), data=encoded_params)
-    string = request.urlopen(request).read()
+    string = urllib2.urlopen(request).read()
     # Parse str to read for success / failure
     result = 0
     return result, string
