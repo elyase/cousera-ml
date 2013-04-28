@@ -2,6 +2,24 @@
 
 Python port of the Coursera-Stanford Machine Learning Matlab code
 
+## Development Roadmap
+
+* More testing
+* Add templates for remaining exercises
+
+## Code design and organization
+
+Same structure of the Matlab code `ex1`, `ex2`, etc folders with corresponding **.py** files instead of **.m** files. There should also be a test file per folder, ex: `ex1/test_ex1.py`.
+
+## Requirements
+
+* numpy
+* pytest (optional for testing)
+
+## Testing
+
+Set your email as an environment variable with `export COURSERA_EMAIL='your@email.com'` and then run `py.test`
+
 ## Contributing
 
 1. Find a bug or feature you'd like to work on.
@@ -11,20 +29,5 @@ Python port of the Coursera-Stanford Machine Learning Matlab code
 5. Create a new working branch for your changes.
 6. If possible make sure your patch includes a corresponding test.
 7. Commit your changes and submit a pull request (`Instructions <http://help.github.com/send-pull-requests/>`).
-
-## Development Roadmap
-
-TODO
-
-## Code design and organization
-
-We will follow the same structure of the Matlab code ex1, ex2, etc folders with corresponding .py files. There should also be a test file per folder, ex: `ex1/test_ex1.py`.
-
-
-## Testing
-
-Just run `py.test`
-
-## How to write a test
 
 
