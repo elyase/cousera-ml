@@ -61,8 +61,27 @@ def sources():
                         ('Normal Equations', ['normalEqn.m'])])
 
 
-def output(partId, auxstring):
-    raise NotImplementedError
+def output(partId, auxstring=''):
+    # Random Test Cases
+    from numpy import ones, arange, column_stack, sin, exp, cos
+
+    X1 = column_stack((ones((20,)), (exp(1)+exp(2)*arange(0.1, 2.1, 0.1))))
+    Y1 = X1[:, 1] + sin(X1[:,0]) + cos(X1[:,1])
+    X2 = column_stack([X1, X1[:,1]**0.5, X1[:,1]**0.25])
+    Y2 = Y1**0.5 + Y1
+    cmd = {
+        1: 'warmUpExercise()',
+        2: 'computeCost(X1, Y1, [0.5, -0.5])',
+        3: 'gradientDescent(X1, Y1, [0.5, -0.5], 0.01, 10)',
+        4: 'featureNormalize(X2[:,1:3])',
+        5: 'computeCostMulti(X2, Y2, [0.1, 0.2, 0.3, 0.4])',
+        6: 'gradientDescentMulti(X2, Y2, [-0.1, -0.2, -0.3, -0.4], 0.01, 10)',
+        7: 'normalEqn(X2, Y2)'
+    }.get(partId)
+    module_name = cmd.split('(')[0]
+    m = __import__(module_name)
+    result = eval('m' + '.' + cmd, globals(), locals())   # improve this
+    return ' '.join("{0:0.5f}".format(e) for e in result.ravel(order='F')) + ' '
 
 
 # ====================== SERVER CONFIGURATION ===========================
@@ -153,8 +172,8 @@ def submitSolution(email, ch_resp, part, output, source, signature):
               'challenge_response': ch_resp,
               'state': signature}
     encoded_params = urllib.urlencode(params)
-    request = urllib2.Request(submit_url(), encoded_params)
-    string = request.urlopen().read()
+    request = urllib2.Request(submit_url(), data=encoded_params)
+    string = request.urlopen(request).read()
     # Parse str to read for success / failure
     result = 0
     return result, string
@@ -170,7 +189,7 @@ def loginPrompt():
 
 def basicPrompt():
     login = raw_input('Login (Email address): ')
-    password = raw_input('Password: ', 's')
+    password = raw_input('Password: ')
     return login, password
 
 
