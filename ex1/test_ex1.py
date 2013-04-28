@@ -25,3 +25,7 @@ def test_getChallenge():
         # set with "export COURSERA_EMAIL='your@email.com'" in bash
     email = os.environ.get("COURSERA_EMAIL", '')
     assert submit.getChallenge(email, 1)[0] == email
+
+
+def test_output():
+    assert len(submit.output(1)) == 200  # value taken from Matlab version
