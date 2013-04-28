@@ -2,10 +2,11 @@
 
 Python port of the Coursera-Stanford Machine Learning Matlab code
 
-## Development Roadmap
-
-* More testing
-* Add templates for remaining exercises
+## How to use:
+Just download or clone the repository, name your solution like the corresponding **.m** file but change the extension to **.py** and finally run:
+```
+python submit.py
+```
 
 ## Code design and organization
 
@@ -15,6 +16,12 @@ Same structure of the Matlab code `ex1`, `ex2`, etc folders with corresponding *
 
 * numpy
 * pytest (optional for testing)
+
+## Development Roadmap
+
+* Implement quicklogin
+* More testing
+* Add templates for remaining exercises
 
 ## Testing
 
