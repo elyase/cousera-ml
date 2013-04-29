@@ -54,11 +54,11 @@ def sources():
     # Returns the source files corresponding to each task
     return OrderedDict([('Warm up exercise ', ['warmUpExercise.py']),
                         ('Computing Cost (for one variable)', ['computeCost.py']),
-                        ('Gradient Descent (for one variable)', ['gradientDescent.m']),
-                        ('Feature Normalization', ['featureNormalize.m']),
-                        ('Computing Cost (for multiple variables)', ['computeCostMulti.m']),
-                        ('Gradient Descent (for multiple variables)', ['gradientDescentMulti.m']),
-                        ('Normal Equations', ['normalEqn.m'])])
+                        ('Gradient Descent (for one variable)', ['gradientDescent.py']),
+                        ('Feature Normalization', ['featureNormalize.py']),
+                        ('Computing Cost (for multiple variables)', ['computeCostMulti.py']),
+                        ('Gradient Descent (for multiple variables)', ['gradientDescentMulti.py']),
+                        ('Normal Equations', ['normalEqn.py'])])
 
 
 def output(partId, auxstring=''):
@@ -72,10 +72,10 @@ def output(partId, auxstring=''):
     cmd = {
         1: 'warmUpExercise()',
         2: 'computeCost(X1, Y1, array([0.5, -0.5]))',
-        3: 'gradientDescent(X1, Y1, [0.5, -0.5], 0.01, 10)',
+        3: 'gradientDescent(X1, Y1, array([0.5, -0.5]), 0.01, 10)',
         4: 'featureNormalize(X2[:,1:3])',
-        5: 'computeCostMulti(X2, Y2, [0.1, 0.2, 0.3, 0.4])',
-        6: 'gradientDescentMulti(X2, Y2, [-0.1, -0.2, -0.3, -0.4], 0.01, 10)',
+        5: 'computeCostMulti(X2, Y2, array([0.1, 0.2, 0.3, 0.4]))',
+        6: 'gradientDescentMulti(X2, Y2, array([-0.1, -0.2, -0.3, -0.4]), 0.01, 10)',
         7: 'normalEqn(X2, Y2)'
     }.get(partId)
     module_name = cmd.split('(')[0]
