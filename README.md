@@ -37,7 +37,7 @@ Set your email as an environment variable with `export COURSERA_EMAIL='your@emai
 6. If possible make sure your patch includes a corresponding test.
 7. Commit your changes and submit a pull request (`Instructions <http://help.github.com/send-pull-requests/>`).
 
-## Credits
+## License
 
 The MIT License (MIT)
 
