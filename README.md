@@ -2,6 +2,8 @@
 
 Python port of the Coursera-Stanford Machine Learning Matlab code
 
+**UPDATE**: This project is not being maintained, I found [this one](https://github.com/tansaku/py-coursera) which I recommend you use too.
+
 ## How to use:
 Just download or clone the repository, name your solution like the corresponding **.m** file but change the extension to **.py** and finally run:
 ```
